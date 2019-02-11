@@ -19,6 +19,12 @@ class Twitter:
                 return True
         return False
 
+    def isOverLimit(self,userId):
+        if (len(self.tweets[userId]) > 10):
+            return True
+        else:
+            return False
+
 
     def checkKey(self,dict_, key):
         """
@@ -43,6 +49,12 @@ class Twitter:
             self.tweets[userId] = [(self.time,tweetId)]
         else:
             self.tweets[userId].append((self.time,tweetId))
+        # Add fix to No More than 10 tweets per Acc
+
+        if self.isOverLimit(userId):
+            del self.tweets[userId][0]
+            
+
 
     def follow(self, followerId: 'int', followeedId: 'int') -> 'None':
         """
@@ -56,21 +68,29 @@ class Twitter:
 
         if not self.isFollow(followerId,followeedId):
             self.users[followerId].append(followeedId)
-
-        
-
-
-
-
+            
 t = Twitter()
 t.postTweet(1,100)
 t.postTweet(2,101)
+
 t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+t.postTweet(3,102)
+
 t.follow(1,2)
 t.follow(1,3)
 t.follow(1,4)
 t.follow(5,6)
-for each in t.users[3]:
-    print(each)
+
+print(len(t.tweets[3]))
     
 print("Ok")
