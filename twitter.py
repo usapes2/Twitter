@@ -13,9 +13,9 @@ class Twitter:
         print("Number of tweets: " + str(len(self.tweets)))
 
 
-    def isFollow(self,userId):
+    def isFollow(self,userId,target):
         for each in self.users[userId]:
-            if userId == each:
+            if target == each:
                 return True
         return False
 
@@ -54,7 +54,7 @@ class Twitter:
         if not self.checkKey(self.users, followerId):
             self.users[followerId] = [] 
 
-        if not self.isFollow(followeedId):
+        if not self.isFollow(followerId,followeedId):
             self.users[followerId].append(followeedId)
 
         
@@ -70,5 +70,7 @@ t.follow(1,2)
 t.follow(1,3)
 t.follow(1,4)
 t.follow(5,6)
-t.pr()
+for each in t.users[3]:
+    print(each)
+    
 print("Ok")
