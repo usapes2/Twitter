@@ -6,6 +6,18 @@ class Twitter:
         self.users = {}  # All users.  key -> UserId, val -> Following List
         self.tweets = {} # All tweets. key -> UserId, val -> Tweets List
         self.time = 0
+        
+
+    def pr(self):
+        print("Number of accounts: " + str(len(self.users)))
+        print("Number of tweets: " + str(len(self.tweets)))
+
+
+    def isFollow(self,userId):
+        for each in self.users[userId]:
+            if userId == each:
+                return True
+        return False
 
 
     def checkKey(self,dict_, key):
@@ -32,15 +44,31 @@ class Twitter:
         else:
             self.tweets[userId].append((self.time,tweetId))
 
+    def follow(self, followerId: 'int', followeedId: 'int') -> 'None':
+        """
+        Follower follows a followee. If the operation is invalid, it should be a no-op.
+        """
+        if not self.checkKey(self.users, followeedId):
+            self.users[followeedId] = []
+
+        if not self.checkKey(self.users, followerId):
+            self.users[followerId] = [] 
+
+        if not self.isFollow(followeedId):
+            self.users[followerId].append(followeedId)
+
+        
 
 
 
 
 t = Twitter()
-t.postTweet(999,123)
-t.postTweet(99,13)
-t.postTweet(99,3)
-t.postTweet(99,0)
-print(t.time)
-
+t.postTweet(1,100)
+t.postTweet(2,101)
+t.postTweet(3,102)
+t.follow(1,2)
+t.follow(1,3)
+t.follow(1,4)
+t.follow(5,6)
+t.pr()
 print("Ok")
