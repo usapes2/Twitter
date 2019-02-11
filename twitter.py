@@ -6,20 +6,30 @@ class Twitter:
         self.users = {}  # All users.  key -> UserId, val -> Following List
         self.tweets = {} # All tweets. key -> UserId, val -> Tweets List
         self.time = 0
-        
+
 
     def pr(self):
+        """
+        Helper function
+        """
         print("Number of accounts: " + str(len(self.users)))
         print("Number of tweets: " + str(len(self.tweets)))
 
 
     def isFollow(self,userId,target):
+        """
+        Helper function
+        """
         for each in self.users[userId]:
             if target == each:
                 return True
         return False
 
+
     def isOverLimit(self,userId):
+        """
+        Helper function
+        """
         if (len(self.tweets[userId]) > 10):
             return True
         else:
@@ -69,22 +79,19 @@ class Twitter:
         if not self.isFollow(followerId,followeedId):
             self.users[followerId].append(followeedId)
             
-t = Twitter()
-t.postTweet(1,100)
-t.postTweet(2,101)
 
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
-t.postTweet(3,102)
+    def unfollow(self, followerId: 'int', followeeId: 'int') -> 'None':
+        """
+        Follower unfollows a followee. If the operation is invalid, it should be a no-op.
+        """
+        if (self.checkKey(self.users, followeedId) ) and (self.checkKey(self.users, followerId)):
+            for idx, val in enumerate(self.users[followerId]):
+                if (val == followeeId):
+                    del self.users[followerId][idx]
+                    break
+
+        
+t = Twitter()
 
 t.follow(1,2)
 t.follow(1,3)
