@@ -5,7 +5,7 @@ class Twitter:
         """
         self.users = {}  # All users.  key -> UserId, val -> Following List
         self.tweets = {} # All tweets. key -> UserId, val -> Tweets List
-        self.time = 0
+        self.time = -10000
 
 
     def pr(self):
@@ -112,8 +112,8 @@ class Twitter:
         # Go to userId retrieve all tweets from his/her followee list, sort, return
         if not self.checkKey(self.users, userId):
             return []
-
-        li = self.tweets[userId]
+        li = []
+       # li = self.tweets[userId]
 
         for each in self.users[userId]:
             if each == userId:
@@ -121,6 +121,10 @@ class Twitter:
             if not self.tweets[each]:
                 break
             for item in self.tweets[each]:
+                li.append(item)
+                
+        if self.tweets[userId]:        
+            for item in self.tweets[userId]:
                 li.append(item)
 
         sorted(li, key = lambda each: each[0])
@@ -130,27 +134,4 @@ class Twitter:
 
 
 
-            
 
-
-
-        
-t = Twitter()
-t.postTweet(1,5)
-print(t.getNewsFeed(1))
-t.follow(1,2)
-t.postTweet(2,6)
-t.prUserFollow(1)
-print(t.getNewsFeed(1))
-
-t.unfollow(1,2)
-t.prUserFollow(1)
-print(t.getNewsFeed(1))
-t.postTweet(2,7)
-t.postTweet(2,8)
-print(t.getNewsFeed(1))
-
-
-
-    
-print("Ok")
