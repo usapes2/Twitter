@@ -16,6 +16,15 @@ class Twitter:
         print("Number of tweets: " + str(len(self.tweets)))
 
 
+    def prUserFollow(self,userId):
+        """
+        Helper function
+        """
+        print("User " + str(userId) + " follows: " + str(len(self.users[userId])))
+        for each in self.users[userId]:
+            print(each)
+
+
     def isFollow(self,userId,target):
         """
         Helper function
@@ -51,15 +60,17 @@ class Twitter:
 
     def postTweet(self, userId: 'int', tweetId: 'int') -> 'None':
         """
-        Compose a new ***Time Stamped Tweet ***
+        Compose a new ***Tweet*** with a time stamp
         """
         self.time = self.time + 1 # Time Stamp for tweet
+        
         if not self.checkKey(self.users, userId):
             self.users[userId] = [] # User doesn't follow anyone yet
             self.tweets[userId] = [(self.time,tweetId)]
-        else:
+        elif not self.checkKey(self.tweets, userId):
+            self.tweets[userId] = [(self.time,tweetId)]
+        else: 
             self.tweets[userId].append((self.time,tweetId))
-        # Add fix to No More than 10 tweets per Acc
 
         if self.isOverLimit(userId):
             del self.tweets[userId][0]
@@ -72,32 +83,74 @@ class Twitter:
         """
         if not self.checkKey(self.users, followeedId):
             self.users[followeedId] = []
+            self.tweets[followeedId] = []
 
         if not self.checkKey(self.users, followerId):
             self.users[followerId] = [] 
+            self.tweets[followerId] = []
 
         if not self.isFollow(followerId,followeedId):
             self.users[followerId].append(followeedId)
             
 
-    def unfollow(self, followerId: 'int', followeeId: 'int') -> 'None':
+    def unfollow(self, followerId: 'int', followeedId: 'int') -> 'None':
         """
         Follower unfollows a followee. If the operation is invalid, it should be a no-op.
         """
         if (self.checkKey(self.users, followeedId) ) and (self.checkKey(self.users, followerId)):
             for idx, val in enumerate(self.users[followerId]):
-                if (val == followeeId):
+                if (val == followeedId):
                     del self.users[followerId][idx]
                     break
 
+    def getNewsFeed(self, userId: 'int') -> 'List[int]':
+        """
+        Retrieve the 10 most recent tweet ids in the user's news feed.
+        Each item in the news feed must be posted by users who the user followed or by the user herself.
+        Tweets must be ordered from most recent to least recent.
+        """
+        # Go to userId retrieve all tweets from his/her followee list, sort, return
+        if not self.checkKey(self.users, userId):
+            return []
+
+        li = self.tweets[userId]
+
+        for each in self.users[userId]:
+            if each == userId:
+                break
+            if not self.tweets[each]:
+                break
+            for item in self.tweets[each]:
+                li.append(item)
+
+        sorted(li, key = lambda each: each[0])
+        li.sort(reverse = True)
+
+        return ( [x[1] for x in li ][:10])
+
+
+
+            
+
+
+
         
 t = Twitter()
-
+t.postTweet(1,5)
+print(t.getNewsFeed(1))
 t.follow(1,2)
-t.follow(1,3)
-t.follow(1,4)
-t.follow(5,6)
+t.postTweet(2,6)
+t.prUserFollow(1)
+print(t.getNewsFeed(1))
 
-print(len(t.tweets[3]))
+t.unfollow(1,2)
+t.prUserFollow(1)
+print(t.getNewsFeed(1))
+t.postTweet(2,7)
+t.postTweet(2,8)
+print(t.getNewsFeed(1))
+
+
+
     
 print("Ok")
